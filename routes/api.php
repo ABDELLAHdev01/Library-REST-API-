@@ -26,7 +26,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('users', 'index');
     Route::post('users', 'store');
     Route::post('users/update', 'update');
-    Route::delete('users/{id}', 'destroy');
+    Route::delete('users/delete', 'destroy');
     Route::post('users/change-password', 'updatePassword');
 });
 
