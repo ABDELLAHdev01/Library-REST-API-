@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RestPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,7 @@ use App\Http\Controllers\UserController;
 |
 */
 Route::controller(AuthController::class)->group(function () {
+
     Route::post('login', 'login');
     Route::post('register', 'register');
     Route::post('logout', 'logout');
@@ -30,4 +32,14 @@ Route::controller(UserController::class)->group(function () {
     Route::post('users/change-password', 'updatePassword');
 });
 
+Route::group(['controller' => RestPasswordController::class], function (){
+    // Request password reset link
+    Route::post('forgot-password', 'resetLink')->name('password.reset');
+    // Reset password
+    Route::post('reset-password', 'resetPassword');
+
+    Route::get('reset-password/{token}', function (string $token) {
+         return $token;
+     });
+});
 

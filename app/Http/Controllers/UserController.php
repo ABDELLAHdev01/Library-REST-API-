@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\PasswordRest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
@@ -82,7 +84,7 @@ class UserController extends Controller
     {
         // update user information from the database using auth jwt token
         $User = User::find(auth()->user()->id);
-        
+          
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -95,7 +97,7 @@ class UserController extends Controller
 
 
         return response()->json($User, 200);
-
+    
     }
 
 
@@ -149,4 +151,21 @@ class UserController extends Controller
         User::destroy(auth()->user()->id);
         return response()->json('User deleted', 200);
     }
+
+
+    // Forget Password api methode
+
+    public function forgotPassword(Request $request){
+        $credentials = $request()->validate([
+            'email' => 'required|email|exists:users'
+        ]);
+        Password::sendResetLink($credentials);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Reset password link sent on your email id.'
+        ]);
+        
+      
+}
 }
